@@ -46,11 +46,12 @@ const arr = [
 
 ]
 const WorkOrder = () => {
-
+  const [step, setStep] = useState(0)
   const [selected, setSelected] = useState([])
   const [expand, setexpand] = useState(NaN)
   const [expArray, setExpArray] = useState([])
   const [collapse, setcollapse] = useState([])
+
   useEffect(() => {
     const data = arr.map((item, index) => { return false })
     setSelected(data)
@@ -94,12 +95,12 @@ const WorkOrder = () => {
 
       {/* Tab Navigation */}
       <div className="flex mb-4">
-        <button className="border-b-2 border-black p-2 font-semibold">Overview</button>
-        <button className="p-2 text-gray-400 ml-4">Other</button>
+        <button onClick={() => { setStep(0) }} className={step == 0 ? `border-b-2 border-black p-2 font-semibold` : "p-2 text-gray-400 ml-4"}>Overview</button>
+        <button onClick={() => { setStep(1) }} className={step == 1 ? `border-b-2 border-black p-2 font-semibold` : "p-2 text-gray-400 ml-4"}>Other</button>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+
+      {step == 0 && <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead>
             <tr className="w-full bg-gray-100 text-left">
@@ -213,7 +214,8 @@ const WorkOrder = () => {
             )}
           </tbody>
         </table>
-      </div>
+      </div>}
+      {step == 1 && <div>Hello World!</div>}
     </div>
   );
 };
