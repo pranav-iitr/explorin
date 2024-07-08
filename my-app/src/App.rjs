@@ -1,0 +1,142 @@
+import React, { useState } from "react";
+
+const packages = [
+  {
+    name: "Civil 1",
+    rate: 567.8,
+    total: "₹ 2,98,6792",
+    activities: [
+      {
+        name: "Activity 1",
+        workItems: ["Work Item 1", "Work Item 2", "Work Item 3"],
+      },
+      {
+        name: "Activity 2",
+        workItems: ["Work Item 1", "Work Item 2", "Work Item 3"],
+      },
+      {
+        name: "Activity 3",
+        workItems: [],
+      },
+      {
+        name: "Activity 4",
+        workItems: [],
+      },
+    ],
+  },
+  {
+    name: "Civil 2",
+    rate: 567.8,
+    total: "₹ 2,98,6792",
+    activities: [
+      {
+        name: "Activity 1",
+        workItems: ["Work Item 1", "Work Item 2", "Work Item 3"],
+      },
+      {
+        name: "Activity 2",
+        workItems: ["Work Item 1", "Work Item 2", "Work Item 3"],
+      },
+      {
+        name: "Activity 3",
+        workItems: [],
+      },
+      {
+        name: "Activity 4",
+        workItems: [],
+      },
+    ],
+  },
+  // ... you can add more packages if required
+];
+
+const WorkOrder = () => {
+  const [expandedPackages, setExpandedPackages] = useState({});
+
+  const togglePackage = (index) => {
+    setExpandedPackages((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  return (
+    <div className="p-6 bg-white min-h-screen">
+      {/* Header */}
+      <div className="flex justify-between items-center border-b pb-4 mb-4">
+        <div className="flex items-center">
+          <button className="mr-4 text-xl">&larr;</button>
+          <h1 className="text-xl font-semibold">Create Workorder</h1>
+        </div>
+        <button className="bg-teal-400 text-white py-2 px-4 rounded">Save</button>
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="flex mb-4">
+        <button className="border-b-2 border-black p-2 font-semibold">Overview</button>
+        <button className="p-2 text-gray-400 ml-4">Other</button>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white">
+          <thead>
+            <tr className="w-full bg-gray-100 text-left">
+              <th className="py-2 px-6">
+                <input type="checkbox" />
+              </th>
+              <th className="py-2 px-6">Packages</th>
+              <th className="py-2 px-6">Rate (in sqft)</th>
+              <th className="py-2 px-6">Total</th>
+              <th className="py-2 px-6"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {packages.map((pkg, pkgIndex) => (
+              <React.Fragment key={pkgIndex}>
+                <tr className="border-b" onClick={() => togglePackage(pkgIndex)}>
+                  <td className="py-2 px-6">
+                    <input type="checkbox" />
+                  </td>
+                  <td className="py-2 px-6">{pkg.name}</td>
+                  <td className="py-2 px-6">{pkg.rate}</td>
+                  <td className="py-2 px-6">{pkg.total}</td>
+                  <td className="py-2 px-6 text-teal-400 text-2xl">
+                    {expandedPackages[pkgIndex] ? "▲" : "▼"}
+                  </td>
+                </tr>
+                {expandedPackages[pkgIndex] &&
+                  pkg.activities.map((activity, activityIndex) => (
+                    <React.Fragment key={activityIndex}>
+                      <tr className="border-b ml-8">
+                        <td className="py-2 px-6">
+                          <input type="checkbox" />
+                        </td>
+                        <td className="py-2 px-6 pl-10">{activity.name}</td>
+                        <td className="py-2 px-6">{pkg.rate}</td>
+                        <td className="py-2 px-6">{pkg.total}</td>
+                        <td className="py-2 px-6"></td>
+                      </tr>
+                      {activity.workItems.map((workItem, workItemIndex) => (
+                        <tr className="border-b ml-16" key={workItemIndex}>
+                          <td className="py-2 px-6">
+                            <input type="checkbox" />
+                          </td>
+                          <td className="py-2 px-6 pl-20">{workItem}</td>
+                          <td className="py-2 px-6">{pkg.rate}</td>
+                          <td className="py-2 px-6">{pkg.total}</td>
+                          <td className="py-2 px-6"></td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default WorkOrder
