@@ -90,20 +90,22 @@ const WorkOrder = () => {
           <button className="mr-4 text-xl">&larr;</button>
           <h1 className="text-xl font-semibold">Create Workorder</h1>
         </div>
-        <button className="bg-teal-400 text-white py-2 px-4 rounded">Save</button>
+        <button
+       
+        className="bg-teal-400 text-white w-32 py-2 px-4 rounded rounded shadow-lg hover:shadow-xl transition-shadow duration-300">Save</button>
       </div>
 
-      {/* Tab Navigation */}
+     
       <div className="flex mb-4">
-        <button onClick={() => { setStep(0) }} className={step == 0 ? `border-b-2 border-black p-2 font-semibold` : "p-2 text-gray-400 ml-4"}>Overview</button>
-        <button onClick={() => { setStep(1) }} className={step == 1 ? `border-b-2 border-black p-2 font-semibold` : "p-2 text-gray-400 ml-4"}>Other</button>
+        <button onClick={() => { setStep(0) }} className={ ` w-64  ${step == 0 ? "border-b-2 border-black p-2 font-semibold" : "border-b p-2 text-gray-400" }` }>Overview</button>
+        <button onClick={() => { setStep(1) }} className={ ` w-64  ${step == 1 ? "border-b-2 border-black p-2 font-semibold" : "border-b p-2 text-gray-400" }` }>Other</button>
       </div>
 
 
       {step == 0 && <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead>
-            <tr className="w-full bg-gray-100 text-left">
+            <tr className="w-full font-medium bg-[#deeafa] text-left">
               <th className="py-2 px-6">
                 <input onClick={() => {
                   const data = selected.map((item) => {
@@ -113,9 +115,9 @@ const WorkOrder = () => {
                   setSelected(data)
                 }} checked={selected.reduce((accumulator, currentValue) => accumulator & currentValue, true)} type="checkbox" />
               </th>
-              <th className="py-2 px-6">Packages</th>
-              <th className="py-2 px-6">Rate (in sqft)</th>
-              <th className="py-2 px-6">Total</th>
+              <th className="py-2 px-6 font-medium ">Packages</th>
+              <th className="py-2 px-6 font-medium flex gap-1">Rate <p className="font-normal" >(in sqft)</p></th>
+              <th className="py-2 px-6 font-medium">Total</th>
               <th className="py-2 px-6"></th>
             </tr>
           </thead>
@@ -140,14 +142,14 @@ const WorkOrder = () => {
                   <td className="py-2 px-6">&#8377; 2,98,6792</td>
                   <td onClick={() => {
                     setexpand(index == expand ? NaN : index)
-                  }} className="py-2 px-6 text-teal-400 text-2xl">{expand == index ? "-" : "+"}</td>
+                  }} className="py-2 px-6 cursor-pointer text-teal-400 text-2xl">{expand == index ? "-" : "+"}</td>
                 </tr>
                 <div>
                   {expand === index && (
                     <>
-                      <div className="flex flex-col px-36">
+                      <ul className="flex flex-col px-36">
                         {Object.keys(item.activites).map((activity, ind) => (
-                          <div key={ind} className="flex justify-between">
+                          <li key={ind} className="flex justify-between">
                             <div className="flex items-center">
                               <input onClick={() => {
                                 console.log(ind, collapse[activity])
@@ -188,7 +190,7 @@ const WorkOrder = () => {
                                 }
                               </div>}
                             </div>
-                            <span className="text-teal-400 text-2xl" onClick={() => {
+                            <span className="text-teal-400 text-2xl cursor-pointer" onClick={() => {
                               // setcollapse({ ...collapse, [activity]: collapse[activity].map((item, i) => { return !item }) })
                               setExpArray(expArray.map((item, i) => {
                                 if (i === ind) {
@@ -202,9 +204,9 @@ const WorkOrder = () => {
                                 expArray[ind] ? "-" : "+"
                               }
                             </span>
-                          </div>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
 
                     </>
                   )}
