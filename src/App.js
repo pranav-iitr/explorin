@@ -4,8 +4,8 @@ const arr = [
     name: "Civil 1",
     activites: {
       activity1: [
-        { taskName: 'Civil 1 Activity 1 Task 1', status: 'pending' },
-        { taskName: 'Civil 1 Activity 1 Task 2', status: 'in-progress' },
+        { taskName: 'Civil 1 Activity 1 Task 1', rate: 45, cost: 50, status: 'pending' },
+        { taskName: 'Civil 1 Activity 1 Task 2', rate: 45, cost: 50, status: 'in-progress' },
         { taskName: 'Civil 1 Activity 1 Task 3', status: 'completed' }
       ],
       activity2: [
@@ -45,6 +45,13 @@ const arr = [
   },
 
 ]
+const UpIcon = () => (
+    <svg className="w-6 h-6" fill="none" stroke="black" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path>
+  </svg>
+
+);
+
 const WorkOrder = () => {
   const [step, setStep] = useState(0)
   const [selected, setSelected] = useState([])
@@ -90,134 +97,125 @@ const WorkOrder = () => {
           <button className="mr-4 text-xl">&larr;</button>
           <h1 className="text-xl font-semibold">Create Workorder</h1>
         </div>
-        <button
-       
-        className="bg-teal-400 text-white w-32 py-2 px-4 rounded rounded shadow-lg hover:shadow-xl transition-shadow duration-300">Save</button>
+        <button className="bg-teal-400 text-white w-32 py-2 px-4 rounded shadow-lg hover:shadow-xl transition-shadow duration-300">Save</button>
       </div>
 
-     
+      {/* Navigation */}
       <div className="flex mb-4">
-        <button onClick={() => { setStep(0) }} className={ ` w-64  ${step == 0 ? "border-b-2 border-black p-2 font-semibold" : "border-b p-2 text-gray-400" }` }>Overview</button>
-        <button onClick={() => { setStep(1) }} className={ ` w-64  ${step == 1 ? "border-b-2 border-black p-2 font-semibold" : "border-b p-2 text-gray-400" }` }>Other</button>
+        <button onClick={() => setStep(0)} className={`w-64 ${step === 0 ? "border-b-2 border-black p-2 font-semibold" : "border-b p-2 text-gray-400"}`}>Overview</button>
+        <button onClick={() => setStep(1)} className={`w-64 ${step === 1 ? "border-b-2 border-black p-2 font-semibold" : "border-b p-2 text-gray-400"}`}>Other</button>
       </div>
 
-
-      {step == 0 && <div className="overflow-x-auto">
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr className="w-full font-medium bg-[#deeafa] text-left">
-              <th className="py-2 px-6">
-                <input onClick={() => {
-                  const data = selected.map((item) => {
-                    const State = selected.reduce((accumulator, currentValue) => accumulator & currentValue, true)
-                    return !State
-                  })
-                  setSelected(data)
-                }} checked={selected.reduce((accumulator, currentValue) => accumulator & currentValue, true)} type="checkbox" />
-              </th>
-              <th className="py-2 px-6 font-medium ">Packages</th>
-              <th className="py-2 px-6 font-medium flex gap-1">Rate <p className="font-normal" >(in sqft)</p></th>
-              <th className="py-2 px-6 font-medium">Total</th>
-              <th className="py-2 px-6"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {arr.map(
-              (item, index) => (<>
-                <tr key={index} className="border-b">
-                  <td className="py-2 px-6">
-                    <input onClick={() => {
-                      const data = selected.map((item, i) => {
-                        if (i === index) {
-                          return !item
-                        }
-                        return item
-                      })
-                      setSelected(data)
-                    }} checked={selected[index]} type="checkbox" />
-
-                  </td>
-                  <td className="py-2 px-6">{item.name}</td>
-                  <td className="py-2 px-6">567.80</td>
-                  <td className="py-2 px-6">&#8377; 2,98,6792</td>
-                  <td onClick={() => {
-                    setexpand(index == expand ? NaN : index)
-                  }} className="py-2 px-6 cursor-pointer text-teal-400 text-2xl">{expand == index ? "-" : "+"}</td>
-                </tr>
-                <div>
+      {/* Overview Table */}
+      {step === 0 && (
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white">
+            <thead>
+              <tr className="w-full font-medium bg-[#deeafa] text-left">
+                <th className="py-2 px-6">
+                  <input
+                    type="checkbox"
+                    onClick={() => {
+                      const state = selected.reduce((acc, cur) => acc && cur, true);
+                      setSelected(selected.map(() => !state));
+                    }}
+                    checked={selected.reduce((acc, cur) => acc && cur, true)}
+                  />
+                </th>
+                <th className="py-2 px-6 font-medium">Packages</th>
+                <th className="py-2 px-6 font-medium flex gap-1">Rate <p className="font-normal">(in sqft)</p></th>
+                <th className="py-2 px-6 font-medium">Total</th>
+                <th className="py-2 px-6"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {arr.map((item, index) => (
+                <React.Fragment key={index}>
+                  <tr className="border-b">
+                    <td className="py-2 px-6">
+                      <input
+                        type="checkbox"
+                        onClick={() => {
+                          const data = selected.map((val, i) => (i === index ? !val : val));
+                          setSelected(data);
+                        }}
+                        checked={selected[index]}
+                      />
+                    </td>
+                    <td className="py-2 px-6">{item.name}</td>
+                    <td className="py-2 px-6">567.80</td>
+                    <td className="py-2 px-6">&#8377; 2,98,6792</td>
+                    <td
+                      onClick={() => setexpand(expand === index ? null : index)}
+                      className="py-2 px-6 cursor-pointer text-teal-400 text-2xl"
+                    >
+                      {expand === index ? '-' : '+'}
+                    </td>
+                  </tr>
                   {expand === index && (
-                    <>
-                      <ul className="flex flex-col px-36">
-                        {Object.keys(item.activites).map((activity, ind) => (
-                          <li key={ind} className="flex justify-between">
-                            <div className="flex items-center">
-                              <input onClick={() => {
-                                console.log(ind, collapse[activity])
-                                const tempData = collapse[activity].reduce((accumulator, currentValue) => accumulator & currentValue, true)
-                                const data = collapse[activity].map((item, i) => {
-                                  return !tempData
-                                })
-                                setcollapse({ ...collapse, [activity]: data })
-                              }} checked={
-                                collapse[activity]?.reduce((accumulator, currentValue) => accumulator & currentValue, true)
-                              } type="checkbox" />
-                              <span className="ml-2">{activity}</span>
-                            </div>
-                            <div className="pt-16 " >
-                              {expArray[ind] && <div className="">
-                                {
-                                  item.activites[activity].map((task, i) => (
-                                    <div key={i} className="flex justify-between">
-                                      <div className="flex items-center">
-                                        <input
-                                          onClick={() => {
-                                            const data = collapse[activity].map((item, j) => {
-                                              if (j === i) {
-                                                return !item
-                                              }
-                                              return item
-                                            })
-                                            setcollapse({ ...collapse, [activity]: data })
-                                          }
-                                          }
-                                          checked={collapse[activity][i]}
-                                          type="checkbox" />
-                                        <span className="ml-2">{task.taskName}</span>
+                    <tr>
+                      <td></td>
+                      <td colSpan="1">
+                        <ul className="flex flex-col px-12">
+                          {Object.keys(item.activites).map((activity, ind) => (
+                            <li key={ind} className="flex justify-between">
+                              <div className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  onClick={() => {
+                                    const state = collapse[activity]?.reduce((acc, cur) => acc && cur, true) || false;
+                                    const data = collapse[activity]?.map(() => !state) || [];
+                                    setcollapse({ ...collapse, [activity]: data });
+                                  }}
+                                  checked={collapse[activity]?.reduce((acc, cur) => acc && cur, true) || false}
+                                />
+                                <span className="ml-2">{activity}</span>
+                              </div>
+                              <div className="pt-16 ">
+                                {expArray[ind] && (
+                                  <div>
+                                    {item.activites[activity].map((task, i) => (
+                                      <div key={i} className="flex justify-between">
+                                        <div className="flex items-center">
+                                          <input
+                                            type="checkbox"
+                                            onClick={() => {
+                                              const data = collapse[activity]?.map((val, j) => (j === i ? !val : val)) || [];
+                                              setcollapse({ ...collapse, [activity]: data });
+                                            }}
+                                            checked={collapse[activity]?.[i] || false}
+                                          />
+                                          <span className="ml-2">{task.taskName}</span>
+                                        </div>
                                       </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                              {/* <div> 500.64 </div>
+                              <div> ₹ 2,98,6792 </div> */}
+                              <span
+                                className="text-teal-400 text-2xl cursor-pointer pt-4"
+                                onClick={() => setExpArray(expArray.map((val, i) => (i === ind ? !val : val)))}
+                              >
+                                {expArray[ind] ? <><UpIcon /></> : '+'}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td className="py-2 px-6">567.80</td>
+                      <td className="py-2 px-6">&#8377; 2,98,6792</td>
 
-                                    </div>
-                                  ))
-                                }
-                              </div>}
-                            </div>
-                            <span className="text-teal-400 text-2xl cursor-pointer" onClick={() => {
-                              // setcollapse({ ...collapse, [activity]: collapse[activity].map((item, i) => { return !item }) })
-                              setExpArray(expArray.map((item, i) => {
-                                if (i === ind) {
-                                  return !item
-                                }
-                                return item
-                              }))
-                            }}>
-
-                              {
-                                expArray[ind] ? "-" : "+"
-                              }
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-
-                    </>
+                    </tr>
                   )}
-                </div>
-              </>
-              )
-            )}
-          </tbody>
-        </table>
-      </div>}
-      {step == 1 && <div>Hello World!</div>}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {step === 1 && <div>Hello World!</div>}
     </div>
   );
 };
